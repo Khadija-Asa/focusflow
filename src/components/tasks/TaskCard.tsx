@@ -2,6 +2,7 @@
 
 import { Task } from "@/types"
 import { useTaskStore } from "@/stores/taskStore"
+import { PomodoroTimer } from "./PomodoroTimer"
 import clsx from "clsx"
 
 const TAG_STYLES: Record<string, string> = {
@@ -66,19 +67,27 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
       </div>
 
       <div className="flex items-center gap-2 flex-shrink-0">
-        {task.pomodoros.length > 0 && (
-          <div className="flex gap-1">
-            {task.pomodoros.map((p) => (
-              <div
-                key={p.id}
-                className={clsx(
-                  "w-1.5 h-1.5 rounded-full",
-                  p.completed ? "bg-accent" : "bg-[#2a2a2a]"
-                )}
-              />
-            ))}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {task.pomodoros.length > 0 && (
+            <div className="flex gap-1">
+              {task.pomodoros.map((p) => (
+                <div
+                  key={p.id}
+                  className={clsx(
+                    "w-1.5 h-1.5 rounded-full",
+                    p.completed ? "bg-accent" : "bg-[#2a2a2a]"
+                  )}
+                />
+              ))}
+            </div>
+          )}
+          {!task.completed && variant === "today" && (
+            <PomodoroTimer
+              taskId={task.id}
+              estimatedMin={task.estimatedMin}
+            />
+          )}
+        </div>
 
         {task.tag && (
           <span

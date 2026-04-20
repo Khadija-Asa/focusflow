@@ -31,7 +31,7 @@ export function TaskList() {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 mb-5">
+      <div className="grid grid-cols-3 gap-2 mb-5 text-center">
         <div className="bg-[#161616] border border-[#222] rounded-xl p-3">
           <p className="text-lg font-medium text-white">{completed}/{total}</p>
           <p className="text-[10px] text-neutral-600 mt-0.5">tâches</p>
