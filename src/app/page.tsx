@@ -14,7 +14,7 @@ export default async function HomePage() {
     <div className="flex flex-col h-screen bg-[#0f0f0f]">
       <Topbar />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar status="idle" />
+        <Sidebar />
         <main className="flex-1 overflow-y-auto p-6">
           <p className="text-neutral-600 text-sm">Zone principale — bientôt prêt</p>
         </main>

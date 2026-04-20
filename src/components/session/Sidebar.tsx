@@ -1,12 +1,36 @@
 "use client"
 
-import { SessionStatus } from "@/types"
+import { useSessionStore } from "@/stores/sessionStore"
+import { useSessionTimer } from "@/hooks/useSessionTimer"
+import { useCallback } from "react"
 
-type SidebarProps = {
-  status: SessionStatus
+function formatTime(seconds: number) {
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = seconds % 60
+  return [h, m, s].map((v) => String(v).padStart(2, "0")).join(":")
 }
 
-export function Sidebar({ status }: SidebarProps) {
+export function Sidebar() {
+  const { status, elapsed, start, end, workSessionId } = useSessionStore()
+  useSessionTimer()
+
+  const handleStart = useCallback(async () => {
+    const res = await fetch("/api/sessions/start", { method: "POST" })
+    const data = await res.json()
+    start(data.id)
+  }, [start])
+
+  const handleEnd = useCallback(async () => {
+    if (!workSessionId) return
+    await fetch("/api/sessions/end", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ workSessionId }),
+    })
+    end()
+  }, [workSessionId, end])
+
   return (
     <aside className="w-64 bg-[#111] border-r border-[#1e1e1e] flex flex-col p-4 flex-shrink-0">
       <div className="bg-[#1a2a1a] border border-[#2d4a2d] rounded-xl p-3 mb-4">
@@ -14,7 +38,7 @@ export function Sidebar({ status }: SidebarProps) {
           {status === "active" ? "Session en cours" : "Aucune session"}
         </p>
         <p className="text-2xl font-medium text-white tracking-tight tabular-nums">
-          00:00:00
+          {formatTime(elapsed)}
         </p>
         <p className="text-xs text-neutral-600 mt-1">
           {status === "active" ? "En cours..." : "Lance ta journée"}
@@ -46,16 +70,27 @@ export function Sidebar({ status }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="mt-auto">
+      <div className="mt-auto flex flex-col gap-2">
         {status === "idle" && (
-          <button className="w-full py-2.5 bg-accent text-[#0a1a0a] text-sm font-medium rounded-xl hover:bg-accent/90 transition-colors">
+          <button
+            onClick={handleStart}
+            className="w-full py-2.5 bg-accent text-[#0a1a0a] text-sm font-medium rounded-xl hover:bg-accent/90 transition-colors"
+          >
             Travail commencé
           </button>
         )}
         {status === "active" && (
-          <button className="w-full py-2.5 bg-transparent border border-[#3a3a3a] text-neutral-500 text-sm rounded-xl hover:border-[#555] transition-colors">
+          <button
+            onClick={handleEnd}
+            className="w-full py-2.5 bg-transparent border border-[#3a3a3a] text-neutral-500 text-sm rounded-xl hover:border-[#555] transition-colors"
+          >
             Travail terminé
           </button>
+        )}
+        {status === "ended" && (
+          <p className="text-center text-xs text-accent">
+            Bonne journée ! 🎉
+          </p>
         )}
       </div>
     </aside>
