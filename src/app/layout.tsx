@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FocusFlow",
   description: "Track your work sessions and stay productive",
+  icons: {
+    icon: "/favicon.svg",
+  },
 }
 
 export default function RootLayout({
