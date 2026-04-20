@@ -30,7 +30,7 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
       )}
     >
       <button
-        onClick={() => !task.completed && completeTask(task.id)}
+        onClick={() => completeTask(task.id, !task.completed)}
         className={clsx(
           "w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center flex-shrink-0 transition-colors",
           task.completed

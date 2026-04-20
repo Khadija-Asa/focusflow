@@ -7,7 +7,7 @@ type TaskStore = {
   isLoading: boolean
   fetchTasks: () => Promise<void>
   addTask: (title: string, estimatedMin?: number, tag?: string) => Promise<void>
-  completeTask: (id: string) => Promise<void>
+  completeTask: (id: string, completed: boolean) => Promise<void>
   moveToToday: (id: string) => Promise<void>
   dismissYesterday: (id: string) => void
 }
@@ -40,16 +40,19 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     }))
   },
 
-  completeTask: async (id) => {
+  completeTask: async (id, completed) => {
     set((state) => ({
       todayTasks: state.todayTasks.map((t) =>
-        t.id === id ? { ...t, completed: true } : t
+        t.id === id ? { ...t, completed } : t
       ),
     }))
     await fetch(`/api/tasks/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ completed: true }),
+      body: JSON.stringify({
+        completed,
+        ...(completed ? {} : { completedAt: null }),
+      }),
     })
   },
 
