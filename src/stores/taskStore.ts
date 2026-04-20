@@ -8,6 +8,7 @@ type TaskStore = {
   fetchTasks: () => Promise<void>
   addTask: (title: string, estimatedMin?: number, tag?: string) => Promise<void>
   completeTask: (id: string, completed: boolean) => Promise<void>
+  deleteTask: (id: string) => Promise<void>
   moveToToday: (id: string) => Promise<void>
   dismissYesterday: (id: string) => void
 }
@@ -54,6 +55,14 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         ...(completed ? {} : { completedAt: null }),
       }),
     })
+  },
+
+  deleteTask: async (id) => {
+    set((state) => ({
+      todayTasks: state.todayTasks.filter((t) => t.id !== id),
+      yesterdayTasks: state.yesterdayTasks.filter((t) => t.id !== id),
+    }))
+    await fetch(`/api/tasks/${id}`, { method: "DELETE" })
   },
 
   moveToToday: async (id) => {

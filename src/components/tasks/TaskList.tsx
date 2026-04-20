@@ -14,6 +14,8 @@ export function TaskList() {
   }, [fetchTasks])
 
   const completed = todayTasks.filter((t) => t.completed).length
+  const activeTasks = todayTasks.filter((t) => !t.completed)
+  const completedTasks = todayTasks.filter((t) => t.completed)
   const total = todayTasks.length
   const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0
 
@@ -57,14 +59,28 @@ export function TaskList() {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {todayTasks.length === 0 && (
-            <p className="text-neutral-600 text-sm py-4 text-center">
-              Aucune tâche pour aujourd'hui — commence par en ajouter une
+          {activeTasks.length === 0 && completedTasks.length === 0 && (
+          <p className="text-neutral-600 text-sm py-4 text-center">
+            Aucune tâche pour aujourd'hui — commence par en ajouter une
+          </p>
+        )}
+
+        {activeTasks.map((task) => (
+          <TaskCard key={task.id} task={task} variant="today" />
+        ))}
+
+        {completedTasks.length > 0 && (
+          <div className="mt-4">
+            <p className="text-[10px] text-neutral-600 uppercase tracking-wider mb-2">
+              Complétées
             </p>
-          )}
-          {todayTasks.map((task) => (
-            <TaskCard key={task.id} task={task} variant="today" />
-          ))}
+            <div className="flex flex-col gap-2">
+              {completedTasks.map((task) => (
+                <TaskCard key={task.id} task={task} variant="today" />
+              ))}
+            </div>
+          </div>
+        )}
         </div>
       )}
 

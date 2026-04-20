@@ -17,7 +17,7 @@ type TaskCardProps = {
 }
 
 export function TaskCard({ task, variant = "today" }: TaskCardProps) {
-  const { completeTask, moveToToday, dismissYesterday } = useTaskStore()
+  const { completeTask, moveToToday, dismissYesterday, deleteTask } = useTaskStore()
 
   return (
     <div
@@ -108,6 +108,15 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
           </div>
         )}
       </div>
+
+      {variant === "today" && (
+        <button
+          onClick={() => deleteTask(task.id)}
+          className="text-neutral-700 hover:text-red-400 transition-colors ml-1 text-xs"
+        >
+          ✕
+        </button>
+      )}
     </div>
   )
 }

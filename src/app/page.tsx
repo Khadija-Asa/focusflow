@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { Topbar } from "@/components/ui/Topbar"
 import { Sidebar } from "@/components/session/Sidebar"
 import { TaskList } from "@/components/tasks/TaskList"
+import { SummaryPanel } from "@/components/summary/SummaryPanel"
+import { MainContent } from "@/components/ui/MainContent"
 
 export default async function HomePage() {
   const session = await auth()
@@ -17,7 +19,7 @@ export default async function HomePage() {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 overflow-y-auto p-6">
-          <TaskList />
+          <MainContent />
         </main>
       </div>
     </div>
