@@ -9,7 +9,7 @@ export async function Topbar() {
         Focus<span className="text-accent">Flow</span>
       </span>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-5">
         <span className="hidden sm:block text-xs text-neutral-500 bg-[#1e1e1e] border border-[#2a2a2a] rounded-full px-3 py-1">
           {new Date().toLocaleDateString("fr-FR", {
             weekday: "long",
@@ -18,32 +18,27 @@ export async function Topbar() {
           })}
         </span>
 
-        <div className="flex items-center gap-2">
-          {session?.user?.image && (
-            <img
-              src={session.user.image}
-              alt={session.user.name ?? "avatar"}
-              className="w-7 h-7 rounded-full"
-            />
-          )}
+        <div className="flex items-center gap-5">
+          
           <span className="hidden sm:block text-xs text-neutral-400">
             {session?.user?.name}
           </span>
-        </div>
-
-        <form
-          action={async () => {
-            "use server"
-            await signOut({ redirectTo: "/login" })
-          }}
-        >
-          <button
-            type="submit"
-            className="text-xs text-neutral-600 hover:text-neutral-400 transition-colors"
+          
+          <form
+            action={async () => {
+              "use server"
+              await signOut({ redirectTo: "/login" })
+            }}
+            className="flex items-center"
           >
-            Déconnexion
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="text-xs text-neutral-600 hover:text-neutral-400 transition-colors cursor-pointer"
+            >
+              Déconnexion
+            </button>
+          </form>
+        </div>
       </div>
     </header>
   )
