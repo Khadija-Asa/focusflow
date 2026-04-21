@@ -164,6 +164,20 @@ export function Sidebar() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <div className="flex items-center justify-center gap-3 mt-4 pt-4 border-t border-[#1a1a1a]">
+          <Link href="/compte" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+            Mon compte
+          </Link>
+          <span className="text-neutral-800 text-[10px]">·</span>
+          <Link href="/mentions-legales" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+            Mentions légales
+          </Link>
+          <span className="text-neutral-800 text-[10px]">·</span>
+          <Link href="/confidentialite" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+            Confidentialité
+          </Link>
+        </div>
       </div>
     </aside>
   )
