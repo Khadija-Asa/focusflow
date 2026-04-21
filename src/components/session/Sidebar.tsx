@@ -1,8 +1,16 @@
 "use client"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useSessionStore } from "@/stores/sessionStore"
 import { useSessionTimer } from "@/hooks/useSessionTimer"
 import { useCallback } from "react"
+
+const NAV_ITEMS = [
+  { label: "Aujourd'hui", href: "/" },
+  { label: "Semaine", href: "/semaine" },
+  { label: "Historique", href: "/historique" },
+]
 
 function formatTime(seconds: number) {
   const h = Math.floor(seconds / 3600)
@@ -13,6 +21,7 @@ function formatTime(seconds: number) {
 
 export function Sidebar() {
   const { status, elapsed, start, end, workSessionId } = useSessionStore()
+  const pathname = usePathname()
   useSessionTimer()
 
   const handleStart = useCallback(async () => {
@@ -46,28 +55,27 @@ export function Sidebar() {
       </div>
 
       <nav className="flex flex-col gap-1">
-        {[
-          { label: "Aujourd'hui", active: true },
-          { label: "Semaine", active: false },
-          { label: "Statistiques", active: false },
-          { label: "Historique", active: false },
-        ].map((item) => (
-          <div
-            key={item.label}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm transition-colors ${
-              item.active
-                ? "bg-[#1e1e1e] text-white"
-                : "text-neutral-600 hover:text-neutral-400"
-            }`}
-          >
-            <div
-              className={`w-1.5 h-1.5 rounded-full ${
-                item.active ? "bg-accent" : "bg-[#333]"
+        {NAV_ITEMS.map((item) => {
+          const active = pathname === item.href
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                active
+                  ? "bg-[#1e1e1e] text-white"
+                  : "text-neutral-600 hover:text-neutral-400"
               }`}
-            />
-            {item.label}
-          </div>
-        ))}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${
+                  active ? "bg-accent" : "bg-[#333]"
+                }`}
+              />
+              {item.label}
+            </Link>
+          )
+        })}
       </nav>
 
       <div className="mt-auto flex flex-col gap-2">
@@ -88,9 +96,7 @@ export function Sidebar() {
           </button>
         )}
         {status === "ended" && (
-          <p className="text-center text-xs text-accent">
-            Bonne journée !
-          </p>
+          <p className="text-center text-xs text-accent">Bonne journée !</p>
         )}
       </div>
     </aside>

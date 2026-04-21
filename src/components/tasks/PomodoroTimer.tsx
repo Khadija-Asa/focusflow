@@ -15,6 +15,23 @@ type Props = {
   estimatedMin: number | null
 }
 
+function ClockIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="8" cy="8" r="6.5" />
+      <path d="M8 5v3.5l2 1.5" />
+    </svg>
+  )
+}
+
 export function PomodoroTimer({ taskId, estimatedMin }: Props) {
   const { activeTaskId, secondsLeft, isRunning, start, stop } = usePomodoroStore()
   const { status: sessionStatus, workSessionId } = useSessionStore()
@@ -31,12 +48,15 @@ export function PomodoroTimer({ taskId, estimatedMin }: Props) {
   if (isThisTask) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-accent tabular-nums">
-          {formatTime(secondsLeft)}
-        </span>
+        <div className="flex items-center gap-1.5 bg-accent/10 border border-accent-border rounded-lg px-2.5 py-1.5">
+          <ClockIcon className="w-3.5 h-3.5 text-accent animate-pulse" />
+          <span className="text-sm font-semibold text-accent tabular-nums tracking-tight">
+            {formatTime(secondsLeft)}
+          </span>
+        </div>
         <button
           onClick={stop}
-          className="text-[10px] px-2 py-1 rounded-md border border-[#3a3a3a] text-neutral-500 hover:text-red-400 hover:border-red-400/30 transition-colors"
+          className="text-[11px] px-2 py-1.5 rounded-lg border border-[#3a3a3a] text-neutral-500 hover:text-red-400 hover:border-red-400/30 transition-colors"
         >
           ✕
         </button>
@@ -56,13 +76,14 @@ export function PomodoroTimer({ taskId, estimatedMin }: Props) {
           : `Lancer ${duration} min`
       }
       className={clsx(
-        "text-[10px] px-2 py-1 rounded-md border transition-colors",
+        "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-colors",
         sessionStatus !== "active" || isOtherTask
           ? "border-[#222] text-neutral-700 cursor-not-allowed"
-          : "border-[#2a2a2a] text-neutral-500 hover:text-accent hover:border-accent-border hover:bg-accent-dim"
+          : "border-[#2a2a2a] text-neutral-400 hover:text-accent hover:border-accent-border hover:bg-accent-dim"
       )}
     >
-      ▶ {duration}min
+      <ClockIcon className="w-3.5 h-3.5" />
+      <span className="text-xs font-medium">{duration} min</span>
     </button>
   )
 }
