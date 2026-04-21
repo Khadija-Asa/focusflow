@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { PageBackground } from "@/components/ui/PageBackground"
 
 type Pomodoro = { id: string; completed: boolean }
 type Task = {
@@ -13,10 +15,10 @@ type Task = {
 }
 
 const TAG_COLORS: Record<string, string> = {
-  dev: "bg-blue-900/40 text-blue-400 border-blue-800",
-  design: "bg-purple-900/40 text-purple-400 border-purple-800",
-  urgent: "bg-red-900/40 text-red-400 border-red-800",
-  autre: "bg-neutral-800 text-neutral-400 border-neutral-700",
+  dev: "bg-[#1a2a1a] text-accent border-accent-border",
+  design: "bg-[#1a1a2e] text-[#7c7cff] border-[#2a2a4a]",
+  urgent: "bg-[#2a1a1a] text-red-400 border-[#4a2d2d]",
+  autre: "bg-[#1e1e1e] text-neutral-500 border-[#2a2a2a]",
 }
 
 const MONTH_LABELS = [
@@ -56,23 +58,39 @@ export function HistoryList() {
 
   if (days.length === 0) {
     return (
-      <p className="text-neutral-600 text-sm py-8 text-center">
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-neutral-600 text-sm py-8 text-center"
+      >
         Aucun historique pour le moment
-      </p>
+      </motion.p>
     )
   }
 
   return (
-    <div>
+    <div className="relative">
+      <PageBackground />
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="relative z-10"
+    >
       <h2 className="text-white text-base font-medium mb-5">Historique complet</h2>
       <div className="flex flex-col gap-6">
-        {days.map((day) => {
+        {days.map((day, dayIndex) => {
           const tasks = grouped[day]
           const completed = tasks.filter((t) => t.completed).length
           const pomodoros = tasks.reduce((acc, t) => acc + t.pomodoros.length, 0)
 
           return (
-            <div key={day}>
+            <motion.div
+              key={day}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: dayIndex * 0.06, duration: 0.3 }}
+            >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className="w-0.5 h-3 bg-accent rounded" />
@@ -87,13 +105,19 @@ export function HistoryList() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                {tasks.map((task) => (
-                  <div
+                {tasks.map((task, taskIndex) => (
+                  <motion.div
                     key={task.id}
+                    initial={{ opacity: 0, x: -6 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: dayIndex * 0.06 + taskIndex * 0.03,
+                      duration: 0.22,
+                    }}
                     className="flex items-center gap-3 bg-[#161616] border border-[#222] rounded-xl px-3 py-2.5"
                   >
                     <div
-                      className={`w-3.5 h-3.5 rounded-full border flex-shrink-0 flex items-center justify-center ${
+                      className={`w-3.5 h-3.5 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
                         task.completed
                           ? "bg-accent border-accent"
                           : "border-[#444]"
@@ -107,11 +131,7 @@ export function HistoryList() {
                           stroke="currentColor"
                           strokeWidth={2.5}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2 6l3 3 5-5"
-                          />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2 6l3 3 5-5" />
                         </svg>
                       )}
                     </div>
@@ -140,13 +160,14 @@ export function HistoryList() {
                         </span>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )
         })}
       </div>
+    </motion.div>
     </div>
   )
 }

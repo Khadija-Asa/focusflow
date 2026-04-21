@@ -1,7 +1,6 @@
 "use client"
 
 import { useSessionStore } from "@/stores/sessionStore"
-import { useSessionTimer } from "@/hooks/useSessionTimer"
 import { useCallback } from "react"
 
 function formatTime(seconds: number) {
@@ -13,7 +12,6 @@ function formatTime(seconds: number) {
 
 export function BottomBar() {
   const { status, elapsed, start, end, workSessionId } = useSessionStore()
-  useSessionTimer()
 
   const handleStart = useCallback(async () => {
     const res = await fetch("/api/sessions/start", { method: "POST" })

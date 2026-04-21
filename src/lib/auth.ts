@@ -11,6 +11,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.GITHUB_SECRET!,
     }),
   ],
+  session: {
+    strategy: "database",
+    maxAge: 72 * 60 * 60, // 72 heures
+    updateAge: 60 * 60,   // rafraîchit le token toutes les heures si actif
+  },
   callbacks: {
     session({ session, user }) {
       session.user.id = user.id

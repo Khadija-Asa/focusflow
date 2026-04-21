@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { useSessionStore } from "@/stores/sessionStore"
 import { useTaskStore } from "@/stores/taskStore"
 import { TypewriterText } from "./TypewriterText"
@@ -33,13 +34,19 @@ export function SummaryPanel() {
   if (status !== "ended") return null
 
   return (
-    <div className="h-full flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="h-full flex flex-col"
+    >
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-white text-base font-medium">
-          Bilan de ta journée
-        </h2>
+        <h2 className="text-white text-base font-medium">Bilan de ta journée</h2>
         {done && (
-          <button
+          <motion.button
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25 }}
             onClick={() => {
               useSessionStore.getState().reset()
               useTaskStore.getState().fetchTasks()
@@ -47,14 +54,18 @@ export function SummaryPanel() {
             className="text-xs text-accent bg-accent-dim border border-accent-border rounded-lg px-3 py-1.5 hover:bg-accent/10 transition-colors"
           >
             Nouvelle journée
-          </button>
+          </motion.button>
         )}
       </div>
 
       <div className="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-6 flex-1">
         {loading ? (
           <div className="flex items-center gap-2 text-neutral-600 text-sm">
-            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+            <motion.div
+              animate={{ scale: [1, 1.4, 1], opacity: [1, 0.4, 1] }}
+              transition={{ duration: 1.4, repeat: Infinity }}
+              className="w-1.5 h-1.5 rounded-full bg-accent"
+            />
             Analyse de ta journée...
           </div>
         ) : summary ? (
@@ -65,6 +76,6 @@ export function SummaryPanel() {
           />
         ) : null}
       </div>
-    </div>
+    </motion.div>
   )
 }

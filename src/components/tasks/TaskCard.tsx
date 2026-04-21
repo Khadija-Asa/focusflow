@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { Task } from "@/types"
 import { useTaskStore } from "@/stores/taskStore"
 import { PomodoroTimer } from "./PomodoroTimer"
@@ -15,13 +16,19 @@ const TAG_STYLES: Record<string, string> = {
 type TaskCardProps = {
   task: Task
   variant?: "today" | "yesterday"
+  index?: number
 }
 
-export function TaskCard({ task, variant = "today" }: TaskCardProps) {
+export function TaskCard({ task, variant = "today", index = 0 }: TaskCardProps) {
   const { completeTask, moveToToday, dismissYesterday, deleteTask } = useTaskStore()
 
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -6, transition: { duration: 0.15 } }}
+      transition={{ duration: 0.22, delay: index * 0.04, ease: "easeOut" }}
       className={clsx(
         "flex items-center gap-3 px-4 py-3 rounded-xl border transition-opacity",
         variant === "today"
@@ -33,23 +40,27 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
       <button
         onClick={() => completeTask(task.id, !task.completed)}
         className={clsx(
-          "w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center flex-shrink-0 transition-colors",
+          "w-4 h-4 rounded-full border-[1.5px] flex items-center justify-center flex-shrink-0 transition-all duration-200",
           task.completed
-            ? "bg-accent border-accent"
+            ? "bg-accent border-accent scale-110"
             : variant === "today"
-            ? "border-[#333] hover:border-accent"
-            : "border-[#3a2d1a] hover:border-accent"
+            ? "border-[#333] hover:border-accent hover:scale-110"
+            : "border-[#3a2d1a] hover:border-accent hover:scale-110"
         )}
       >
         {task.completed && (
-          <div className="w-1.5 h-1.5 rounded-full bg-[#0a1a0a]" />
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="w-1.5 h-1.5 rounded-full bg-[#0a1a0a]"
+          />
         )}
       </button>
 
       <div className="flex-1 min-w-0">
         <p
           className={clsx(
-            "text-sm truncate",
+            "text-sm truncate transition-colors duration-300",
             task.completed
               ? "line-through text-neutral-600"
               : variant === "today"
@@ -70,9 +81,12 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
         <div className="flex items-center gap-2">
           {task.pomodoros.length > 0 && (
             <div className="flex gap-1">
-              {task.pomodoros.map((p) => (
-                <div
+              {task.pomodoros.map((p, i) => (
+                <motion.div
                   key={p.id}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: i * 0.05 }}
                   className={clsx(
                     "w-1.5 h-1.5 rounded-full",
                     p.completed ? "bg-accent" : "bg-[#2a2a2a]"
@@ -82,10 +96,7 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
             </div>
           )}
           {!task.completed && variant === "today" && (
-            <PomodoroTimer
-              taskId={task.id}
-              estimatedMin={task.estimatedMin}
-            />
+            <PomodoroTimer taskId={task.id} estimatedMin={task.estimatedMin} />
           )}
         </div>
 
@@ -126,6 +137,6 @@ export function TaskCard({ task, variant = "today" }: TaskCardProps) {
           ✕
         </button>
       )}
-    </div>
+    </motion.div>
   )
 }
