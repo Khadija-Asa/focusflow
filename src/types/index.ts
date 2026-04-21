@@ -1,5 +1,13 @@
 export type SessionStatus = "idle" | "active" | "ended"
 
+export type WorkSession = {
+  id: string
+  startedAt: Date
+  endedAt: Date | null
+  userId: string
+  pomodoros: Pomodoro[]
+}
+
 export type Pomodoro = {
   id: string
   startedAt: Date
