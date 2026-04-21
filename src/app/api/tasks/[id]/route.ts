@@ -15,11 +15,16 @@ export async function PATCH(
   const { id } = await params
   const body = await req.json()
 
+  const { completed, scheduledFor, title, estimatedMin, tag } = body
+
   const task = await prisma.task.update({
     where: { id, userId: session.user.id },
     data: {
-      ...body,
-      ...(body.completed ? { completedAt: new Date() } : {}),
+      ...(completed !== undefined && { completed, completedAt: completed ? new Date() : null }),
+      ...(scheduledFor !== undefined && { scheduledFor: new Date(scheduledFor) }),
+      ...(title !== undefined && { title }),
+      ...(estimatedMin !== undefined && { estimatedMin }),
+      ...(tag !== undefined && { tag }),
     },
     include: { pomodoros: true },
   })

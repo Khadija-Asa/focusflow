@@ -11,6 +11,15 @@ export async function POST(req: Request) {
 
   const { taskId, workSessionId } = await req.json()
 
+  const [task, workSession] = await Promise.all([
+    prisma.task.findUnique({ where: { id: taskId, userId: session.user.id } }),
+    prisma.workSession.findUnique({ where: { id: workSessionId, userId: session.user.id } }),
+  ])
+
+  if (!task || !workSession) {
+    return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 })
+  }
+
   const pomodoro = await prisma.pomodoro.create({
     data: {
       taskId,

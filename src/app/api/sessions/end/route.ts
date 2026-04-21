@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const { workSessionId } = await req.json()
 
   const workSession = await prisma.workSession.update({
-    where: { id: workSessionId },
+    where: { id: workSessionId, userId: session.user.id },
     data: { endedAt: new Date() },
     include: {
       tasks: true,
