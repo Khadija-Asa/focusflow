@@ -142,14 +142,26 @@ export function Sidebar() {
             </motion.button>
           )}
           {status === "ended" && (
-            <motion.p
+            <motion.div
               key="done"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center text-xs text-accent"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="bg-[#1a2a1a] border border-[#2d4a2d] rounded-xl px-4 py-4 flex flex-col items-center gap-2"
             >
-              Bonne journée !
-            </motion.p>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.15, type: "spring", stiffness: 200 }}
+                className="w-8 h-8 rounded-full bg-accent/10 border border-accent-border flex items-center justify-center"
+              >
+                <svg className="w-4 h-4 text-accent" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 8l4 4 8-8" />
+                </svg>
+              </motion.div>
+              <p className="text-sm font-medium text-white">Bonne journée !</p>
+              <p className="text-[10px] text-neutral-600 text-center">Session terminée avec succès</p>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

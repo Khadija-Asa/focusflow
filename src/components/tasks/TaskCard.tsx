@@ -29,10 +29,11 @@ export function TaskCard({ task, variant = "today", index = 0 }: TaskCardProps) 
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -6, transition: { duration: 0.15 } }}
       transition={{ duration: 0.22, delay: index * 0.04, ease: "easeOut" }}
+      whileHover={{ backgroundColor: variant === "today" ? "#1a1a1a" : "#1e1810" }}
       className={clsx(
         "flex items-center gap-3 px-4 py-3 rounded-xl border transition-opacity",
         variant === "today"
-          ? "bg-[#161616] border-[#222]"
+          ? "bg-[#161616] border-[#1e3a1e]"
           : "bg-[#1a1510] border-[#3a2d1a]",
         task.completed && "opacity-40"
       )}

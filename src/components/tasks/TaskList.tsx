@@ -39,21 +39,51 @@ export function TaskList() {
         </motion.button>
       </motion.div>
 
-      <div className="grid grid-cols-3 gap-2 mb-5 text-center">
+      <div className="grid grid-cols-3 gap-2 mb-5">
         {[
-          { value: `${completed}/${total}`, label: "tâches" },
-          { value: todayTasks.reduce((acc, t) => acc + t.pomodoros.length, 0), label: "pomodoros" },
-          { value: `${completionRate}%`, label: "complétion" },
+          {
+            value: `${completed}/${total}`,
+            label: "tâches",
+            icon: (
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 8l4 4 8-8" />
+              </svg>
+            ),
+          },
+          {
+            value: todayTasks.reduce((acc, t) => acc + t.pomodoros.length, 0),
+            label: "pomodoros",
+            icon: (
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="8" cy="8" r="6" />
+                <path d="M8 5v3.5l2 1.5" />
+              </svg>
+            ),
+          },
+          {
+            value: `${completionRate}%`,
+            label: "complétion",
+            icon: (
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12 L5 7 L8 10 L11 5 L14 8" />
+              </svg>
+            ),
+          },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.02, borderColor: "#2d4a2d" }}
             transition={{ delay: 0.05 + i * 0.07, duration: 0.3 }}
-            className="bg-[#161616] border border-[#222] rounded-xl p-3"
+            className="relative bg-[#161616] border border-[#222] rounded-xl p-3.5 cursor-default overflow-hidden"
           >
-            <p className="text-lg font-medium text-white">{stat.value}</p>
-            <p className="text-[10px] text-neutral-600 mt-0.5">{stat.label}</p>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-accent/50">{stat.icon}</span>
+            </div>
+            <p className="text-xl font-semibold text-white tabular-nums">{stat.value}</p>
+            <p className="text-[10px] text-neutral-600 mt-0.5 uppercase tracking-wide">{stat.label}</p>
           </motion.div>
         ))}
       </div>

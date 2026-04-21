@@ -7,6 +7,7 @@ type SessionStore = {
   elapsed: number
   workSessionId: string | null
   start: (workSessionId: string) => void
+  restore: (workSessionId: string, elapsed: number) => void
   end: () => void
   tick: () => void
   reset: () => void
@@ -23,6 +24,14 @@ export const useSessionStore = create<SessionStore>((set) => ({
       status: "active",
       startedAt: new Date(),
       elapsed: 0,
+      workSessionId,
+    }),
+
+  restore: (workSessionId, elapsed) =>
+    set({
+      status: "active",
+      startedAt: new Date(),
+      elapsed,
       workSessionId,
     }),
 

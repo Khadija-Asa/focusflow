@@ -26,14 +26,9 @@ export async function Topbar() {
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2f2f2f] to-transparent" />
 
       {/* logo */}
-      <div className="flex items-center gap-2.5">
-        <div className="w-6 h-6 rounded-md bg-accent-dim border border-accent-border flex items-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-accent" />
-        </div>
-        <span className="text-sm font-semibold text-white tracking-tight">
-          Focus<span className="text-accent">Flow</span>
-        </span>
-      </div>
+      <span className="text-sm font-semibold text-white tracking-tight">
+        Focus<span className="text-accent">Flow</span>
+      </span>
 
       {/* date — centre */}
       <div className="hidden md:flex items-center gap-2 text-xs text-neutral-600">

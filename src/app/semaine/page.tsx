@@ -1,4 +1,7 @@
+import type { Metadata } from "next"
 import { auth } from "@/lib/auth"
+
+export const metadata: Metadata = { title: "Semaine — FocusFlow" }
 import { redirect } from "next/navigation"
 import { Topbar } from "@/components/ui/Topbar"
 import { Sidebar } from "@/components/session/Sidebar"
