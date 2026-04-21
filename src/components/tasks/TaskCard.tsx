@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
 import { Task } from "@/types"
 import { useTaskStore } from "@/stores/taskStore"
 import { PomodoroTimer } from "./PomodoroTimer"
@@ -11,6 +12,44 @@ const TAG_STYLES: Record<string, string> = {
   dev: "bg-[#1a2a1a] text-accent border-accent-border",
   urgent: "bg-[#2a1a1a] text-red-400 border-[#4a2d2d]",
   autre: "bg-[#1e1e1e] text-neutral-500 border-[#2a2a2a]",
+}
+
+function DeleteButton({ onDelete }: { onDelete: () => void }) {
+  const [confirm, setConfirm] = useState(false)
+
+  if (confirm) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex items-center gap-1 ml-1"
+        >
+          <button
+            onClick={() => setConfirm(false)}
+            className="text-[10px] px-1.5 py-0.5 rounded border border-[#2a2a2a] text-neutral-600 hover:text-neutral-400 transition-colors"
+          >
+            non
+          </button>
+          <button
+            onClick={onDelete}
+            className="text-[10px] px-1.5 py-0.5 rounded border border-red-900/40 text-red-500 hover:bg-red-900/20 transition-colors"
+          >
+            oui
+          </button>
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
+
+  return (
+    <button
+      onClick={() => setConfirm(true)}
+      className="text-neutral-700 hover:text-red-400 transition-colors ml-1 text-xs"
+    >
+      ✕
+    </button>
+  )
 }
 
 type TaskCardProps = {
@@ -131,12 +170,7 @@ export function TaskCard({ task, variant = "today", index = 0 }: TaskCardProps) 
       </div>
 
       {variant === "today" && (
-        <button
-          onClick={() => deleteTask(task.id)}
-          className="text-neutral-700 hover:text-red-400 transition-colors ml-1 text-xs"
-        >
-          ✕
-        </button>
+        <DeleteButton onDelete={() => deleteTask(task.id)} />
       )}
     </motion.div>
   )
