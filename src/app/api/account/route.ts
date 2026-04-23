@@ -18,7 +18,7 @@ export async function DELETE() {
 
   // Révoque l'autorisation GitHub — force le re-consentement à la prochaine connexion
   if (githubAccount?.access_token) {
-    await fetch(
+    const revokeRes = await fetch(
       `https://api.github.com/applications/${process.env.GITHUB_ID}/grant`,
       {
         method: "DELETE",
@@ -32,6 +32,11 @@ export async function DELETE() {
         body: JSON.stringify({ access_token: githubAccount.access_token }),
       }
     )
+    if (!revokeRes.ok) {
+      console.error("[account/DELETE] GitHub grant revocation failed:", revokeRes.status, await revokeRes.text())
+    }
+  } else {
+    console.warn("[account/DELETE] No GitHub access_token found for user", userId)
   }
 
   await prisma.$transaction([
