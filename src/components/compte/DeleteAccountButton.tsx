@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { signOut, signIn } from "next-auth/react"
+import { signOut } from "next-auth/react"
 
 export function DeleteAccountButton() {
   const [step, setStep] = useState<"idle" | "confirm" | "loading">("idle")
@@ -12,17 +12,8 @@ export function DeleteAccountButton() {
     if (input !== "SUPPRIMER") return
     setStep("loading")
 
-    const res = await fetch("/api/account", { method: "DELETE" })
-    const data = await res.json()
-
-    // Déconnecte la session NextAuth sans redirection
-    await signOut({ redirect: false })
-
-    // Redirige directement vers GitHub OAuth — force l'affichage de l'écran d'autorisation
-    // puisque le grant GitHub a été révoqué côté serveur
-    await signIn("github", { callbackUrl: "/" }, {
-      ...(data.githubEmail ? { login: data.githubEmail } : {}),
-    })
+    await fetch("/api/account", { method: "DELETE" })
+    await signOut({ callbackUrl: "/login" })
   }
 
   return (
