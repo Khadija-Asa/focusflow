@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { ThemeProvider } from "@/components/ui/ThemeProvider"
 import { SessionProvider } from "@/components/ui/SessionProvider"
 import "./globals.css"
 
@@ -28,12 +27,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         <SessionProvider>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
+          {children}
         </SessionProvider>
       </body>
     </html>

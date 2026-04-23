@@ -1,5 +1,6 @@
 import { auth, signOut } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 
 function getInitials(name?: string | null) {
   if (!name) return "?"
@@ -27,9 +28,9 @@ export async function Topbar() {
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2f2f2f] to-transparent" />
 
       {/* logo */}
-      <span className="text-sm font-semibold text-white tracking-tight">
+      <Link href="/" className="text-sm font-semibold text-white tracking-tight hover:opacity-80 transition-opacity">
         Focus<span className="text-accent">Flow</span>
-      </span>
+      </Link>
 
       {/* date — centre */}
       <div className="hidden md:flex items-center gap-2 text-xs text-neutral-600">
