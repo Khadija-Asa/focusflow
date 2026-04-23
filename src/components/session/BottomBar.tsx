@@ -149,16 +149,24 @@ export function BottomBar() {
             >
               {item.icon}
               <span className="text-[10px] font-medium">{item.label}</span>
-              {active && (
-                <motion.div
-                  layoutId="bottombar-active"
-                  className="absolute bottom-1.5 w-1 h-1 rounded-full bg-accent"
-                  transition={{ duration: 0.2 }}
-                />
-              )}
             </Link>
           )
         })}
+      </div>
+
+      {/* liens légaux */}
+      <div className="flex items-center justify-center gap-3 pb-2">
+        <Link href="/compte" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+          Mon compte
+        </Link>
+        <span className="text-neutral-800">·</span>
+        <Link href="/mentions-legales" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+          Mentions légales
+        </Link>
+        <span className="text-neutral-800">·</span>
+        <Link href="/confidentialite" className="text-[10px] text-neutral-700 hover:text-neutral-500 transition-colors">
+          Confidentialité
+        </Link>
       </div>
     </div>
   )

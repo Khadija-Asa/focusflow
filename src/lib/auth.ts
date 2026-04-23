@@ -13,7 +13,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   session: {
     strategy: "database",
-    maxAge: 72 * 60 * 60, // 72 heures
+    maxAge: 48 * 60 * 60, // 48 heures
     updateAge: 60 * 60,   // rafraîchit le token toutes les heures si actif
   },
   callbacks: {

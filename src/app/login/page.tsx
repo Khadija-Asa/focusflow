@@ -1,6 +1,5 @@
-import { auth } from "@/lib/auth"
+import { auth, signIn } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { signIn } from "@/lib/auth"
 import { LoginBackground } from "@/components/login/LoginBackground"
 import { LoginCard } from "@/components/login/LoginCard"
 
