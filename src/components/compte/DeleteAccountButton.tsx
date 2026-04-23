@@ -2,19 +2,18 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 export function DeleteAccountButton() {
   const [step, setStep] = useState<"idle" | "confirm" | "loading">("idle")
   const [input, setInput] = useState("")
-  const router = useRouter()
 
   const handleDelete = async () => {
     if (input !== "SUPPRIMER") return
     setStep("loading")
 
     await fetch("/api/account", { method: "DELETE" })
-    router.push("/login")
+    await signOut({ callbackUrl: "/login" })
   }
 
   return (
