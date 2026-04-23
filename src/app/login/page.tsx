@@ -12,7 +12,7 @@ export default async function LoginPage() {
 
   const action = async () => {
     "use server"
-    await signIn("github", { redirectTo: "/" })
+    await signIn("github", { redirectTo: "/" }, { prompt: "login" })
   }
 
   return (

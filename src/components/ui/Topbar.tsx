@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 
 function getInitials(name?: string | null) {
   if (!name) return "?"
@@ -52,6 +53,35 @@ export async function Topbar() {
         <form
           action={async () => {
             "use server"
+            const s = await auth()
+            if (s?.user?.id) {
+              const githubAccount = await prisma.account.findFirst({
+                where: { userId: s.user.id, provider: "github" },
+              })
+
+              await prisma.workSession.updateMany({
+                where: { userId: s.user.id, endedAt: null },
+                data: { endedAt: new Date() },
+              })
+
+              if (githubAccount?.access_token) {
+                const basicAuth = Buffer.from(
+                  `${process.env.GITHUB_ID}:${process.env.GITHUB_SECRET}`
+                ).toString("base64")
+                await fetch(
+                  `https://api.github.com/applications/${process.env.GITHUB_ID}/grant`,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: `Basic ${basicAuth}`,
+                      "Content-Type": "application/json",
+                      Accept: "application/vnd.github+json",
+                    },
+                    body: JSON.stringify({ access_token: githubAccount.access_token }),
+                  }
+                )
+              }
+            }
             await signOut({ redirectTo: "/login" })
           }}
           className="flex items-center"
